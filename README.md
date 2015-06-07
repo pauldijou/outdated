@@ -54,6 +54,12 @@ Examples:
                           update them.
 ```
 
+## Test
+
+``` bash
+npm test
+```
+
 ## License
 
 This software is licensed under the Apache 2 license, quoted below.

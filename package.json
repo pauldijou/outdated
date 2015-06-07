@@ -12,6 +12,9 @@
     "lib": "lib",
     "bin": "bin"
   },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --recursive --no-timeouts --reporter mocha-better-spec-reporter"
+  },
   "dependencies": {
     "graceful-fs": "^3.0.8",
     "bluebird": "^2.9.27",
@@ -21,11 +24,16 @@
     "bower": "^1.4.1",
     "bower-json": "^0.5.0",
     "string-length": "^1.0.0",
-
     "yargs": "^3.10.0",
     "chalk": "^1.0.0",
     "log-symbols": "^1.0.0",
     "text-table": "^0.2.0",
     "inquirer": "^0.8.5"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "chai": "^3.0.0",
+    "chai-as-promised": "^5.1.0",
+    "mocha-better-spec-reporter": "^2.0.1"
   }
 }
