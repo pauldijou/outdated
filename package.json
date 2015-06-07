@@ -1,0 +1,31 @@
+{
+  "name": "outdated",
+  "version": "0.0.1",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/pauldijou/outdated.git"
+  },
+  "bin": {
+    "outdated": "bin/outdated"
+  },
+  "directories": {
+    "lib": "lib",
+    "bin": "bin"
+  },
+  "dependencies": {
+    "graceful-fs": "^3.0.8",
+    "bluebird": "^2.9.27",
+    "lodash": "^3.9.3",
+    "semver": "^4.3.6",
+    "npm": "^2.11.0",
+    "bower": "^1.4.1",
+    "bower-json": "^0.5.0",
+    "string-length": "^1.0.0",
+
+    "yargs": "^3.10.0",
+    "chalk": "^1.0.0",
+    "log-symbols": "^1.0.0",
+    "text-table": "^0.2.0",
+    "inquirer": "^0.8.5"
+  }
+}

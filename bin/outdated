@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+
+'use strict'
+
+var yargs = require('yargs');
+var chalk = require('chalk');
+
+var argv = yargs
+  .version(function() {
+    return require('../package').version;
+  })
+  .alias('V', 'version')
+  .usage('\nUsage: ' + chalk.cyan('outdated') + ' [options]\n\n' + chalk.yellow('Warning') + ': using "latest" option without asking will automatically update your JSON files to latest versions. If you want to play it safe, do no use this option and keep the "ask" option to true.')
+  .example('$0', 'Display all outdated packages and ask you if you want to update them.')
+  .example('$0 -a', 'Display all packages and ask you if you want to update them.')
+  .example('$0 -a --no-ask', 'Display all packages.')
+  .example('$0 -apu --no-ask', 'Display all packages and automatically prune and update them.')
+  .options({
+    s: {
+      alias: 'silent',
+      default: false,
+      type: 'boolean',
+      describe: 'Disable console output'
+    },
+    a: {
+      alias: 'all',
+      default: false,
+      type: 'boolean',
+      describe: 'Display all packages rather than only outdated ones'
+    },
+    k: {
+      alias: 'ask',
+      default: true,
+      type: 'boolean',
+      describe: 'Ask you before taking actions like pruning or updating'
+    },
+    p: {
+      alias: 'prune',
+      default: false,
+      type: 'boolean',
+      describe: 'Prune all unused packages'
+    },
+    u: {
+      alias: 'update',
+      default: false,
+      type: 'boolean',
+      describe: 'Update all outdated packages to the wanted version'
+    },
+    l: {
+      alias: 'latest',
+      default: false,
+      type: 'boolean',
+      describe: 'Update all outdated packages to the latest version'
+    },
+    v: {
+      alias: 'verbose',
+      default: false,
+      type: 'boolean',
+      describe: 'More stuff on your console output'
+    }
+  })
+  .alias('h', 'help')
+  .showHelpOnFail(false, "Specify --help for available options")
+  .epilog('License Apache 2. Copyright 2015 Paul Dijou.')
+  .argv;
+
+if (argv.help) {
+  console.log(yargs.help());
+} else {
+  require('../index')({
+    silent: argv.silent,
+    all: argv.all,
+    ask: argv.ask,
+    prune: argv.prune,
+    update: argv.update,
+    jsonUpdate: argv.latest,
+    verbose: argv.verbose
+  });
+}
