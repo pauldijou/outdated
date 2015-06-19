@@ -214,7 +214,7 @@ function outdated(opts) {
   var context = Context.init(opts, defaults);
 
   context.log('');
-  context.info('Loading dependencies...');
+  context.info('Loading dependencies... (this might take some time)');
 
   return Promise.resolve(context)
     .then(check)
