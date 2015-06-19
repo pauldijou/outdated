@@ -4,13 +4,33 @@
 
 var yargs = require('yargs');
 var chalk = require('chalk');
+var logSymbols = require('log-symbols');
+
+var legend = chalk.cyan('Legend') + ':\n'
+  + logSymbols.success + '  All good, nothing to do (hidden by default)\n'
+  + logSymbols.info + '  Something strange happened (see Infos column)\n'
+  + logSymbols.warning + '  You might want to do something\n'
+  + logSymbols.error + '  You probably need to do something';
+
+var glossary = chalk.cyan('Glossary') + ':\n'
+  + chalk.bold('Skipped') + ': couldn\'t handle the package (see Infos column)\n'
+  + chalk.bold('Prune') + ': remove packages locally installed but not used anymore\n'
+  + chalk.bold('Install') + ': download the package inside your project\n'
+  + chalk.bold('Update') + ': increase the locally installed version\n'
+  + chalk.bold('Current') + ': the range you defined inside your JSON files\n'
+  + chalk.bold('Local') + ': the locally installed version\n'
+  + chalk.bold('Wanted') + ': the greatest version inside your current range\n'
+  + chalk.bold('Latest') + ': the geatest stable version of the package\n'
+  + chalk.bold('Non-stable') + ': local is greater than latest...';
+
+var warning = chalk.yellow('Warning') + ': using "latest" option without asking will automatically update your JSON files to latest versions. If you want to play it safe, do not use this option and keep the "ask" option to true.'
 
 var argv = yargs
   .version(function() {
     return require('../package').version;
   })
   .alias('V', 'version')
-  .usage('\nUsage: ' + chalk.cyan('outdated') + ' [options]\n\n' + chalk.yellow('Warning') + ': using "latest" option without asking will automatically update your JSON files to latest versions. If you want to play it safe, do no use this option and keep the "ask" option to true.')
+  .usage('\nUsage: ' + chalk.cyan('outdated') + ' [options]\n\n' + legend + '\n\n' + glossary + '\n\n' + warning)
   .example('$0', 'Display all outdated packages and ask you if you want to update them.')
   .example('$0 -a', 'Display all packages and ask you if you want to update them.')
   .example('$0 -a --no-ask', 'Display all packages.')
@@ -32,13 +52,13 @@ var argv = yargs
       alias: 'all',
       default: false,
       type: 'boolean',
-      describe: 'Display all packages rather than only outdated ones'
+      describe: 'Display all packages'
     },
     k: {
       alias: 'ask',
       default: true,
       type: 'boolean',
-      describe: 'Ask you before taking actions like pruning or updating'
+      describe: 'Ask you for pruning and updating'
     },
     p: {
       alias: 'prune',
@@ -50,13 +70,13 @@ var argv = yargs
       alias: 'update',
       default: false,
       type: 'boolean',
-      describe: 'Update all outdated packages to the wanted version'
+      describe: 'Update to the wanted version'
     },
     l: {
       alias: 'latest',
       default: false,
       type: 'boolean',
-      describe: 'Update all outdated packages to the latest version'
+      describe: 'Update to the latest version'
     },
     v: {
       alias: 'verbose',

@@ -6,13 +6,12 @@ var logSymbols = require('log-symbols');
 var inquirer = require('inquirer');
 var utils = require('./lib/utils');
 var Dependency = require('./lib/dependency');
+var Context = require('./lib/context');
 
-var managers = [
-  require('./lib/npm'),
-  require('./lib/bower')
-]
-
-var logger;
+var managers = {
+  npm: require('./lib/npm'),
+  bower: require('./lib/bower')
+}
 
 // Options:
 // dir[String]: the root folder where to look for JSON files
@@ -35,41 +34,41 @@ var defaults = {
 
 // Perform the verification of all packages for all package manangers
 function check(context) {
-  return Promise.all(_.map(managers, function (manager) {
-    return manager.check(context);
-  })).then(function (results) {
-    context.results = results;
+  return Promise.all(_.map(managers, function (manager, name) {
+    return manager.check(context).then(function (dependencies) {
+      context.addDependencies(name, dependencies);
+      return dependencies;
+    });
+  })).then(function () {
     return context;
   });
 }
 
 // Output in the console the result of all the previous checks
 function output(context) {
-  context.options.silent || context.results.forEach(function (res, index) {
-    var manager = managers[index];
-    logger.log('');
-    logger.log(chalk.underline(manager.name));
+  _.each(context.dependencies, function (dependencies, name) {
+    var manager = managers[name];
+    context.log('');
+    context.log(chalk.underline(manager.name));
 
-    if (res.ok) {
+    if (dependencies.length === 0) {
+      context.log(logSymbols.success + ' No dependencies.');
+    } else {
       // Remove all valid dependencies by default
       if (!context.options.all) {
-        res.value = res.value.filter(function (dep) {
+        dependencies = dependencies.filter(function (dep) {
           return !dep.is.ok;
+        }).sort(function (dep1, dep2) {
+          if (dep1.name < dep2.name) return -1
+          else if (dep1.name > dep2.name) return 1
+          else return 0;
         });
       }
 
-      if (res.value.length > 0) {
-        logger.log(textTable(Dependency.toTable(res.value), {stringLength: stringLength}));
+      if (dependencies.length > 0) {
+        context.log(textTable(Dependency.toTable(dependencies), {stringLength: stringLength}));
       } else {
-        logger.log(logSymbols.success + ' All dependencies are up-to-date.');
-      }
-
-    } else {
-      logger.log(logSymbols.warning + ' We couldn\'t load any package for ' + manager.name + '. If you are not using it anyway, that`s fine, but otherwise, that might be a bug. In that case, please re-run using the "verbose" option to see the full error.');
-
-      if (context.options.verbose) {
-        logger.log('');
-        logger.stack(res.value);
+        context.log(logSymbols.success + ' All dependencies are up-to-date.');
       }
     }
   });
@@ -78,66 +77,62 @@ function output(context) {
 }
 
 // Depending on the result of a check, will ask the user about actions to perform like pruning or updating
-function askForResult(res, index) {
-  if (!res.ok) {
-    return Promise.resolve({});
-  } else {
-    var manager = managers[index];
-    var prompts = [];
+function askForDependencies(context, dependencies, name) {
+  var manager = managers[name];
+  var prompts = [];
 
-    if (Dependency.hasAction('prune', res.value)) {
-      prompts.push({
-        type: 'list',
-        name: 'prune',
-        message: 'You have unused ' + manager.name + ' packages. Do you want to prune them?',
-        default: true,
-        choices: [
-          {name: 'Yes', value: true},
-          {name: 'No', value: false}
-        ]
-      });
-    }
-
-    if (Dependency.hasAction('update', res.value)) {
-      prompts.push({
-        type: 'list',
-        name: 'update',
-        message: 'Do you want to update all outdated packages?',
-        default: true,
-        choices: [
-          {name: 'Yes', value: true},
-          {name: 'No', value: false}
-        ]
-      });
-    }
-
-    if (Dependency.hasAction('jsonUpdate', res.value)) {
-      prompts.push({
-        type: 'checkbox',
-        name: 'jsonUpdate',
-        message: 'Select any package to update outside of their current range',
-        choices: res.value.filter(function (dep) {
-          return dep.actions.jsonUpdate;
-        }).map(function (dep) {
-          return {
-            name: dep.name +': '+ dep.current +' -> '+ Dependency.update(dep.current, dep.latest),
-            value: {name: dep.name, version: Dependency.update(dep.current, dep.latest)}
-          }
-        })
-      });
-    }
-
-    return new Promise(function (resolve, reject) {
-      if (prompts.length > 0) {
-        logger.log('');
-        logger.log(chalk.underline(manager.name));
-      }
-
-      inquirer.prompt(prompts, function (answers) {
-        resolve(answers);
-      });
+  if (!context.options.prune && Dependency.hasAction('prune', dependencies)) {
+    prompts.push({
+      type: 'list',
+      name: 'prune',
+      message: 'You have unused ' + manager.name + ' packages. Do you want to prune them?',
+      default: true,
+      choices: [
+        {name: 'Yes', value: true},
+        {name: 'No', value: false}
+      ]
     });
   }
+
+  if (!context.options.update && Dependency.hasAction('update', dependencies)) {
+    prompts.push({
+      type: 'list',
+      name: 'update',
+      message: 'Do you want to update all outdated packages?',
+      default: true,
+      choices: [
+        {name: 'Yes', value: true},
+        {name: 'No', value: false}
+      ]
+    });
+  }
+
+  if (!context.options.jsonUpdate && Dependency.hasAction('jsonUpdate', dependencies)) {
+    prompts.push({
+      type: 'checkbox',
+      name: 'jsonUpdate',
+      message: 'Select any package to update outside of their current range',
+      choices: dependencies.filter(function (dep) {
+        return dep.actions.jsonUpdate;
+      }).map(function (dep) {
+        return {
+          name: dep.name +': '+ dep.current +' -> '+ Dependency.update(dep.current, dep.latest),
+          value: {name: dep.name, version: Dependency.update(dep.current, dep.latest)}
+        }
+      })
+    });
+  }
+
+  return new Promise(function (resolve, reject) {
+    if (prompts.length > 0) {
+      context.log('');
+      context.log(chalk.underline(manager.name));
+    }
+
+    inquirer.prompt(prompts, function (answers) {
+      resolve(answers);
+    });
+  });
 }
 
 // Chain questions one package manager at a time
@@ -146,13 +141,12 @@ function ask(context) {
     // We could run all Promises in parallel but we totally don't want that
     // otherwise, we would have the first question for all managers at the same time... oops
     // Let's chain them
-    context.answers = [];
     var resultAnswers = Promise.resolve(context);
 
-    context.results.forEach(function (result, index) {
+    _.each(context.dependencies, function (dependencies, name) {
       resultAnswers = resultAnswers.then(function (context) {
-        return askForResult(result, index).then(function (answers) {
-          context.answers.push(answers);
+        return askForDependencies(context, dependencies, name).then(function (answers) {
+          context.addAnswers(name, answers);
           return context;
         });
       });
@@ -163,22 +157,30 @@ function ask(context) {
     // We consider that all default answers have been selected
     // (aka doing nothing)
     // One empty object for each result
-    context.answers = context.results.map(function () { return {}; });
+    _.each(context.dependencies, function (dependencies, name) {
+      context.addAnswers(name, {});
+    });
     return context;
   }
 }
 
 // Perform all actions depending on options and user answers
 function act(context) {
-  return Promise.all(context.answers.map(function (answers, index) {
-    var manager = managers[index];
+  return Promise.all(_.map(context.answers, function (answers, name) {
+    var manager = managers[name];
     var result = Promise.resolve({});
 
     if (context.options.prune || answers.prune) {
       result = result.then(manager.prune);
     }
 
-    if (context.options.jsonUpdate || (answers.jsonUpdate && answers.jsonUpdate.length > 0)) {
+    if (context.options.jsonUpdate) {
+      result = result.then(function () {
+        return manager.jsonUpdate(context, _.map(context.dependencies[name], function (dep) {
+          return {name: dep.name, version: Dependency.update(dep.current, dep.latest)}
+        }));
+      });
+    } else if (answers.jsonUpdate && answers.jsonUpdate.length > 0) {
       result = result.then(function () {
         return manager.jsonUpdate(context, answers.jsonUpdate);
       });
@@ -193,33 +195,33 @@ function act(context) {
   });
 }
 
-function logError(err) {
-  var prefix = '[' + chalk.red('ERROR') + '] ';
-  logger.log('');
-  logger.log(prefix + 'A totally unexpected error just happened. I am deeply sorry about that. ');
-  logger.log(prefix + 'Please, raise an issue on the bug tracker and explain how you used the tool and copy/paste the stack trace below.');
-  logger.log(prefix + 'Thanks a lot for your help and sorry again.');
-  logger.log(prefix + 'Bug tracker at: https://github.com/pauldijou/outdated/issues');
-  logger.log('');
-  logger.stack(err);
+function logError(context) {
+  return function (err) {
+    var prefix = '[' + chalk.red('ERROR') + '] ';
+    context.log('');
+    context.log(prefix + 'A totally unexpected error just happened. I am deeply sorry about that.');
+    context.log(prefix + 'Please, raise an issue on the bug tracker and explain how you used the tool and copy/paste the stack trace below.');
+    context.log(prefix + 'Thanks a lot for your help and sorry again.');
+    context.log(prefix + 'Bug tracker at: https://github.com/pauldijou/outdated/issues');
+    context.log('');
+    context.stack(err);
+    throw err;
+  };
 }
 
 // The main function chaining all previous ones
 function outdated(opts) {
-  var context = { options: _.merge({}, defaults, opts || {}) };
-  logger = new utils.Logger(context.options);
+  var context = Context.init(opts, defaults);
 
-  console.log(context.options.dir);
-
-  logger.log('');
-  logger.info('Loading dependencies...');
+  context.log('');
+  context.info('Loading dependencies...');
 
   return Promise.resolve(context)
     .then(check)
     .then(output)
     .then(ask)
     .then(act)
-    .catch(logError);
+    .catch(logError(context));
 }
 
 module.exports = outdated;
