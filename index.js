@@ -98,7 +98,7 @@ function askForDependencies(context, dependencies, name) {
     prompts.push({
       type: 'list',
       name: 'update',
-      message: 'Do you want to update all outdated packages?',
+      message: 'Do you want to install/update all outdated packages?',
       default: true,
       choices: [
         {name: 'Yes', value: true},
