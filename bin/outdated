@@ -36,12 +36,6 @@ var argv = yargs
   .example('$0 -a --no-ask', 'Display all packages.')
   .example('$0 -apu --no-ask', 'Display all packages and automatically prune and update them.')
   .options({
-    d: {
-      alias: 'dir',
-      default: '.',
-      type: 'string',
-      describe: 'Directory containing JSON files'
-    },
     s: {
       alias: 'silent',
       default: false,

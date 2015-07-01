@@ -56,7 +56,6 @@ update your JSON files to latest versions. If you want to play it safe, do not
 use this option and keep the "ask" option to true.
 
 Options:
-  -d, --dir      Directory containing JSON files         [string] [default: "."]
   -s, --silent   Disable console output               [boolean] [default: false]
   -a, --all      Display all packages                 [boolean] [default: false]
   -k, --ask      Ask you for pruning and updating      [boolean] [default: true]

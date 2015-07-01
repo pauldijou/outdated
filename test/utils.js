@@ -1,13 +1,39 @@
 var _ = require('lodash');
 var utils = module.exports;
+var cp = require('child_process');
+
+utils.run = function (cwd, options) {
+  return new Promise(function (resolve, reject) {
+    var child = cp.fork(__dirname + '/fork.js', [], {
+      cwd: cwd
+    });
+
+    var context = {};
+
+    child.on('error', function (err) {
+      reject(err);
+    });
+
+    child.on('exit', function () {
+      resolve(context);
+    });
+
+    child.on('message', function (value) {
+      context = value;
+      child.disconnect();
+    });
+
+    child.send(options);
+  });
+}
 
 utils.write = function (filename, obj) {
   require('graceful-fs').writeFileSync(filename, JSON.stringify(obj, null, 2));
 };
 
-utils.prop = function (propName, checkFn) {
-  return function (value) {
-    return checkFn(value[propName]);
+utils.check = function (propName, value) {
+  return function (context) {
+    return utils[propName].check(value, context[propName]);
   };
 };
 
@@ -21,7 +47,9 @@ utils.dependencies = {
   },
 
   equal: function (dep1, dep2) {
-    if (dep1.name !== dep2.name) {
+    if (!dep1 || !dep2) {
+      return dep1 === dep2;
+    } else if (dep1.name !== dep2.name) {
       console.error('Different names: ' + dep1.name + ' !== ' + dep2.name);
     } else if (dep1.current !== dep2.current) {
       console.error('Different currents ['+dep1.name+']: ' + dep1.current + ' !== ' + dep2.current);
@@ -42,40 +70,10 @@ utils.dependencies = {
     }), Boolean);
   },
 
-  equalsTo: function (deps1) {
-    return function (deps2) {
-      return utils.dependencies.equals(deps1, deps2);
-    };
+  check: function (wrapper1, wrapper2) {
+    return _.isEqual(Object.keys(wrapper1), Object.keys(wrapper2)) &&
+      _.every(_.map(Object.keys(wrapper1), function (value, key) {
+        return utils.dependencies.equals(wrapper1[key], wrapper2[key]);
+      }));
   }
 };
-
-utils.results = {
-  equal: function (res1, res2) {
-    if (!res1.ok && !res2.ok) {
-      if (res1.value.code === res2.value.code) {
-        return true;
-      } else {
-        console.error('Different codes: ' + res1.value.code + ' !== ' + res2.value.code);
-        return false;
-      }
-    } else if (res1.ok && res2.ok) {
-      return utils.dependencies.equals(res1.value, res2.value);
-    } else {
-      console.error('One result is ok but not the other.');
-      return false;
-    }
-  },
-
-  equals: function (results1, results2) {
-    return _.every(_.zipWith(results1, results2, function (res1, res2) {
-      var e = utils.results.equal(res1, res2);
-      return e;
-    }), Boolean);
-  },
-
-  equalsTo: function (results1) {
-    return function (results2) {
-      return utils.results.equals(results1, results2);
-    };
-  }
-}
