@@ -83,6 +83,8 @@ License Apache 2. Copyright 2015 Paul Dijou.
 npm test
 ```
 
+If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` before running the test since it will reset everything at the end using `git checkout`.
+
 ## License
 
 This software is licensed under the Apache 2 license, quoted below.

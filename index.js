@@ -14,7 +14,6 @@ var managers = {
 }
 
 // Options:
-// dir[String]: the root folder where to look for JSON files
 // silent[Boolean]: output inside console or  not
 // all[Boolean]: output all dependencies (only display invalid dependencies by default)
 // prune[Boolean]: if true, will prune all unused dependencies at the end
@@ -22,7 +21,6 @@ var managers = {
 // jsonUpdate[Boolean]: if true, will update JSON files to the latest dependencies and then install them
 // verbose[Boolean]: if true, display more log and error stack trace
 var defaults = {
-  dir: '.',
   silent: false,
   all: false,
   ask: true,
@@ -35,9 +33,15 @@ var defaults = {
 // Perform the verification of all packages for all package manangers
 function check(context) {
   return Promise.all(_.map(managers, function (manager, name) {
-    return manager.check(context).then(function (dependencies) {
+    return manager.check().then(function (dependencies) {
       context.addDependencies(name, dependencies);
       return dependencies;
+    }, function (err) {
+      if (err && err.code === 'ENOTFOUND') {
+        context.addDependencies(name, err);
+      } else {
+        throw err;
+      }
     });
   })).then(function () {
     return context;
@@ -51,7 +55,12 @@ function output(context) {
     context.log('');
     context.log(chalk.underline(manager.name));
 
-    if (dependencies.length === 0) {
+    if (dependencies.length === undefined && dependencies.code) {
+      // An "expected" error happened (like a package not found in Bower)
+      context.log(logSymbols.error + '  ' + dependencies.message);
+      // Remove the error so nothing is processed further down
+      context.addDependencies(name, []);
+    } else if (dependencies.length === 0) {
       context.log(logSymbols.success + ' No dependencies.');
     } else {
       // Remove all valid dependencies by default
@@ -116,8 +125,8 @@ function askForDependencies(context, dependencies, name) {
         return dep.actions.jsonUpdate;
       }).map(function (dep) {
         return {
-          name: dep.name +': '+ dep.current +' -> '+ Dependency.update(dep.current, dep.latest),
-          value: {name: dep.name, version: Dependency.update(dep.current, dep.latest)}
+          name: dep.name +': '+ dep.current +' -> '+ dep.updateTo(),
+          value: {name: dep.name, from: dep.current, to: dep.updateTo()}
         }
       })
     });
@@ -176,8 +185,10 @@ function act(context) {
 
     if (context.options.jsonUpdate) {
       result = result.then(function () {
-        return manager.jsonUpdate(context, _.map(context.dependencies[name], function (dep) {
-          return {name: dep.name, version: Dependency.update(dep.current, dep.latest)}
+        return manager.jsonUpdate(context.dependencies[name].filter(function (dep) {
+          return dep.actions.jsonUpdate;
+        }).map(function (dep) {
+          return {name: dep.name, from: dep.current, to: dep.updateTo()}
         }));
       });
     } else if (answers.jsonUpdate && answers.jsonUpdate.length > 0) {

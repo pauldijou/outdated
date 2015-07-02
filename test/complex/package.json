@@ -1,0 +1,10 @@
+{
+  "name": "test-complex",
+  "dependencies": {
+    "test-npm-update": "^1.0.0",
+    "does-not-exist-never": "1.0.0"
+  },
+  "devDependencies": {
+    "outdated-test": "^1.0.0"
+  }
+}
