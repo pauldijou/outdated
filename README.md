@@ -87,7 +87,7 @@ npm test
 npm test complex
 ```
 
-If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` **before** running the test since it will reset everything at the end using `git checkout`.
+If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` **before** running the test since it will reset everything at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
 
 ## License
 

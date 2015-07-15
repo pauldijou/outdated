@@ -1,6 +1,6 @@
 {
   "name": "outdated",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Manage, update and prune your dependencies like a boss.",
   "homepage": "https://github.com/pauldijou/outdated",
   "bugs": {
