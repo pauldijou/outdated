@@ -66,8 +66,8 @@ Options:
   -p, --prune    Prune all unused packages            [boolean] [default: false]
   -u, --update   Update to the wanted version         [boolean] [default: false]
   -l, --latest   Update to the latest version         [boolean] [default: false]
-  -v, --verbose  More stuff on your console output    [boolean] [default: false]
-  -V, --version  Show version number                                   [boolean]
+  -V, --verbose  More stuff on your console output    [boolean] [default: false]
+  -v, --version  Show version number                                   [boolean]
 
 Examples:
   outdated                Display all outdated packages and ask you if you want
@@ -85,11 +85,12 @@ License Apache 2. Copyright 2015 Paul Dijou.
 
 ``` bash
 npm test
-# You can run only the tests inside a subdirectory of 'test' with 'npm test [folder name]'
+# You can run only the tests inside a subdirectory of 'test'
+# with 'npm test [folder name]'
 npm test complex
 ```
 
-If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` **before** running the test since it will reset everything at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
+If you create new tests or edit an existing one, be sure to commit at least all those files and folders inside the test (`package.json`, `bower.json`, `.bowerrc`, `node_modules`, `bower_components` and `components`) **before** running the test since all will be reset at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
 
 ## License
 

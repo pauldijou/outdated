@@ -29,7 +29,7 @@ var argv = yargs
   .version(function() {
     return require('../package').version;
   })
-  .alias('V', 'version')
+  .alias('v', 'version')
   .usage('\nUsage: ' + chalk.cyan('outdated') + ' [options]\n\n' + legend + '\n\n' + glossary + '\n\n' + warning)
   .example('$0', 'Display all outdated packages and ask you if you want to update them.')
   .example('$0 -a', 'Display all packages and ask you if you want to update them.')
@@ -72,7 +72,7 @@ var argv = yargs
       type: 'boolean',
       describe: 'Update to the latest version'
     },
-    v: {
+    V: {
       alias: 'verbose',
       default: false,
       type: 'boolean',
