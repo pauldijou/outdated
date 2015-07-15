@@ -1,5 +1,7 @@
 # Outdated
 
+Manage, update and prune your dependencies like a boss.
+
 ## Install
 
 ```
@@ -22,8 +24,8 @@ outdated [options]
 ### Versioning
 
 - Valid semver (ex: `1.2.3`, `^1.2.3`, `1.2.x`, ...)
-- Github (ex: `username/project#v1.2.3`,`git://github.com/username/project#v1.2.3`)
-- Bitbucket (ex: `git://bitbucket.org/username/project#v1.2.3`)
+- GitHub (ex: `username/project#v1.2.3`,`git://github.com/username/project#v1.2.3`)
+- Bitbucket (ex: `git+https://bitbucket.org/username/project#v1.2.3`)
 
 (if using a Git repository, git tags which are valid semver will be used as possible versions for the package)
 
@@ -81,9 +83,11 @@ License Apache 2. Copyright 2015 Paul Dijou.
 
 ``` bash
 npm test
+# You can run only the tests inside a subdirectory of 'test' with 'npm test [folder name]'
+npm test complex
 ```
 
-If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` before running the test since it will reset everything at the end using `git checkout`.
+If you create new tests or edit an existing one, be sure to commit everything inside `package.json`, `bower.json`, `node_modules` and `bower_components` **before** running the test since it will reset everything at the end using `git checkout`.
 
 ## License
 

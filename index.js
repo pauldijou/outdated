@@ -34,11 +34,14 @@ var defaults = {
 function check(context) {
   return Promise.all(_.map(managers, function (manager, name) {
     return manager.check().then(function (dependencies) {
-      context.addDependencies(name, dependencies);
+      context.setDependencies(name, dependencies);
       return dependencies;
     }, function (err) {
       if (err && err.code === 'ENOTFOUND') {
-        context.addDependencies(name, err);
+        context.setDependencies(name, err);
+      } else if (err && err.code === 'ECMDERR') {
+        err.message += '\nPlease fix this dependency before runing outdated again.'
+        context.setDependencies(name, err);
       } else {
         throw err;
       }
@@ -56,11 +59,13 @@ function output(context) {
     context.log(chalk.underline(manager.name));
 
     if (dependencies.length === undefined && dependencies.code) {
+      context.ok[name] = false;
       // An "expected" error happened (like a package not found in Bower)
       context.log(logSymbols.error + '  ' + dependencies.message);
       // Remove the error so nothing is processed further down
-      context.addDependencies(name, []);
+      context.setDependencies(name, []);
     } else if (dependencies.length === 0) {
+      context.ok[name] = true;
       context.log(logSymbols.success + ' No dependencies.');
     } else {
       // Remove all valid dependencies by default
@@ -75,8 +80,10 @@ function output(context) {
       }
 
       if (dependencies.length > 0) {
+        context.ok[name] = false;
         context.log(textTable(Dependency.toTable(dependencies), {stringLength: stringLength}));
       } else {
+        context.ok[name] = true;
         context.log(logSymbols.success + ' All dependencies are up-to-date.');
       }
     }
@@ -126,7 +133,7 @@ function askForDependencies(context, dependencies, name) {
       }).map(function (dep) {
         return {
           name: dep.name +': '+ dep.current +' -> '+ dep.updateTo(),
-          value: {name: dep.name, from: dep.current, to: dep.updateTo()}
+          value: dep
         }
       })
     });
@@ -177,7 +184,7 @@ function ask(context) {
 function act(context) {
   return Promise.all(_.map(context.answers, function (answers, name) {
     var manager = managers[name];
-    var result = Promise.resolve({});
+    var result = Promise.resolve(context);
 
     if (context.options.prune || answers.prune) {
       result = result.then(manager.prune);
@@ -185,10 +192,8 @@ function act(context) {
 
     if (context.options.jsonUpdate) {
       result = result.then(function () {
-        return manager.jsonUpdate(context.dependencies[name].filter(function (dep) {
+        return manager.jsonUpdate(context, context.dependencies[name].filter(function (dep) {
           return dep.actions.jsonUpdate;
-        }).map(function (dep) {
-          return {name: dep.name, from: dep.current, to: dep.updateTo()}
         }));
       });
     } else if (answers.jsonUpdate && answers.jsonUpdate.length > 0) {
@@ -197,7 +202,9 @@ function act(context) {
       });
     } else if (context.options.update || answers.update) {
       // That's an "else if" because "jsonUpdate" will also do an "update" anyway
-      result = result.then(manager.update);
+      result = result.then(function () {
+        return manager.update(context);
+      });
     }
 
     return result;
@@ -220,6 +227,21 @@ function logError(context) {
   };
 }
 
+function goodbye(context) {
+  context.log('');
+
+  var allOk = _.reduce(context.ok, function (acc, current) {
+    return acc && current;
+  }, true);
+
+  if (allOk) {
+    context.log('Everything is so perfect in this project that you totally deserve a lollipop ----()');
+    context.log('');
+  }
+
+  return context;
+}
+
 // The main function chaining all previous ones
 function outdated(opts) {
   var context = Context.init(opts, defaults);
@@ -232,6 +254,7 @@ function outdated(opts) {
     .then(output)
     .then(ask)
     .then(act)
+    .then(goodbye)
     .catch(logError(context));
 }
 

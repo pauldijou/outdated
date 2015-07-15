@@ -1,0 +1,3 @@
+{
+  "shorthand-resolver": "git+https://bitbucket.org/{{shorthand}}.git"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "test-basic",
+  "dependencies": {
+    "outdated-test": "^1.0.0",
+    "test-npm-update": "^1.0.0"
+  }
+}

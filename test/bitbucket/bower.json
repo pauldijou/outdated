@@ -1,0 +1,10 @@
+{
+  "name": "test-bitbucket",
+  "dependencies": {
+    "test-npm-update": "git+https://bitbucket.org/pauldijou/test-npm-update.git#v1.0.1"
+  },
+  "devDependencies": {
+    "outdated-test-2": "git+https://bitbucket.org/pauldijou/outdated-test-2#de70aaa06f0410de463edf2813150fdc0edad2ca",
+    "outdated-test": "pauldijou/outdated-test#1.0.0"
+  }
+}

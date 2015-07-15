@@ -1,0 +1,9 @@
+{
+  "name": "test-npm-update",
+  "version": "1.0.1",
+  "description": "An empty package to test npm update",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pauldijou/test-npm-update"
+  }
+}

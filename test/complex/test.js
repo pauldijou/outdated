@@ -33,7 +33,7 @@ var postDependencies = {
 var outdated;
 var outdated2;
 
-describe('Complex outdated', function () {
+describe('Complex dependencies', function () {
   before(function () {
     outdated = utils.run(__dirname, {
       silent: true,

@@ -1,0 +1,14 @@
+{
+  "name": "test-npm-update",
+  "homepage": "https://github.com/pauldijou/test-npm-update",
+  "version": "1.0.1",
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "2596918c8b8d98809d534ef0fb6f2e66ff2ddfbd"
+  },
+  "_source": "git://github.com/pauldijou/test-npm-update.git",
+  "_target": "v1.0.1",
+  "_originalSource": "git://github.com/pauldijou/test-npm-update.git"
+}

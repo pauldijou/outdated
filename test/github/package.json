@@ -1,0 +1,11 @@
+{
+  "name": "test-git",
+  "dependencies": {
+    "does-not-exist-never": "pauldijou/does-not-exist-never#1.0.0",
+    "test-npm-update": "git://github.com/pauldijou/test-npm-update.git#v1.0.1"
+  },
+  "devDependencies": {
+    "outdated-test-2": "git://github.com/pauldijou/outdated-test-2#de70aaa06f0410de463edf2813150fdc0edad2ca",
+    "outdated-test": "pauldijou/outdated-test#1.0.0"
+  }
+}

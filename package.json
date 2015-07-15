@@ -1,26 +1,46 @@
 {
   "name": "outdated",
   "version": "0.0.1",
+  "description": "Manage, update and prune your dependencies like a boss.",
+  "homepage": "https://github.com/pauldijou/outdated",
+  "bugs": {
+    "email": "paul.dijou@gmail.com",
+    "url": "https://github.com/pauldijou/outdated/issues"
+  },
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/pauldijou/outdated.git"
   },
+  "author": {
+    "email": "paul.dijou@gmail.com",
+    "name": "Paul Dijou",
+    "url": "http://pauldijou.fr"
+  },
+  "keywords": [
+    "dependency",
+    "dependencies",
+    "package",
+    "packages",
+    "check",
+    "update",
+    "prune"
+  ],
   "bin": {
-    "outdated": "bin/outdated"
+    "outdated": "bin/outdated.js"
   },
   "directories": {
     "lib": "lib",
     "bin": "bin"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive --no-timeouts --reporter mocha-better-spec-reporter"
+    "test": "node ./scripts/test.js"
   },
   "dependencies": {
-    "graceful-fs": "^3.0.8",
+    "graceful-fs": "^4.1.2",
     "bluebird": "^2.9.27",
-    "lodash": "^3.9.3",
-    "semver": "^4.3.6",
-    "npm": "^2.11.0",
+    "lodash": "^3.10.0",
+    "semver": "^5.0.0",
+    "npm": "^2.13.0",
     "bower": "^1.4.1",
     "bower-json": "^0.5.0",
     "string-length": "^1.0.0",
@@ -28,15 +48,14 @@
     "chalk": "^1.0.0",
     "log-symbols": "^1.0.0",
     "text-table": "^0.2.0",
-    "inquirer": "^0.8.5",
+    "inquirer": "^0.9.0",
     "hosted-git-info": "^2.1.4",
-    "github-url-from-username-repo": "^1.0.2",
     "request": "2.58.0"
   },
   "devDependencies": {
     "mocha": "^2.2.5",
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
-    "mocha-better-spec-reporter": "^2.0.1"
+    "mocha-better-spec-reporter": "^2.1.0"
   }
 }

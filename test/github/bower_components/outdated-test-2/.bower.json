@@ -1,0 +1,17 @@
+{
+  "name": "outdated-test-2",
+  "description": "An empty package to test outdated",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pauldijou/outdated-test-2.git"
+  },
+  "homepage": "https://github.com/pauldijou/outdated-test-2",
+  "_release": "de70aaa06f",
+  "_resolution": {
+    "type": "commit",
+    "commit": "de70aaa06f0410de463edf2813150fdc0edad2ca"
+  },
+  "_source": "git://github.com/pauldijou/outdated-test-2.git",
+  "_target": "de70aaa06f0410de463edf2813150fdc0edad2ca",
+  "_originalSource": "git://github.com/pauldijou/outdated-test-2"
+}

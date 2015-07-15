@@ -16,7 +16,7 @@ var dependencies = {
 
 var outdated;
 
-describe('Classic outdated', function () {
+describe('Basic dependencies', function () {
   before(function () {
     outdated = utils.run(__dirname, {
       silent: true,

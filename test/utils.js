@@ -68,37 +68,57 @@ utils.dependencies = {
   },
 
   equal: function (dep1, dep2, manager) {
-    var prefix = manager ? '[' + manager + ']' : '';
+    var prefix = manager ? '[' + manager + '] ' : '';
+    if (dep1) {
+      prefix += '[' + dep1.name + '] ';
+    } else if (dep2) {
+      prefix += '[' + dep2.name + '] ';
+    }
+    var result = true;
+
+    function error(message) {
+      result = false;
+      console.log(prefix + message);
+    }
 
     if (!dep1 || !dep2) {
       if (dep1 !== dep2) {
-        console.error(prefix + 'One undefined while not the other');
+        error('One undefined while not the other');
       }
-      return dep1 === dep2;
+      result = (dep1 === dep2);
     } else if (dep1.name !== dep2.name) {
-      console.error(prefix + 'Different names: ' + dep1.name + ' !== ' + dep2.name);
+      error('Different names: ' + dep1.name + ' !== ' + dep2.name);
     } else if (dep1.current !== dep2.current) {
-      console.error(prefix + '['+dep1.name+'] Different currents: ' + dep1.current + ' !== ' + dep2.current);
+      error('Different currents: ' + dep1.current + ' !== ' + dep2.current);
     } else if (dep1.latest !== dep2.latest) {
-      console.error(prefix + '['+dep1.name+'] Different latests: ' + dep1.latest + ' !== ' + dep2.latest);
+      error('Different latests: ' + dep1.latest + ' !== ' + dep2.latest);
     } else if (dep1.local !== dep2.local) {
-      console.error(prefix + '['+dep1.name+'] Different locals: ' + dep1.local + ' !== ' + dep2.local);
+      error('Different locals: ' + dep1.local + ' !== ' + dep2.local);
     } else if (dep1.skipped !== dep2.skipped) {
-      console.error(prefix + '['+dep1.name+'] Different skipped: ' + dep1.skipped + ' !== ' + dep2.skipped);
+      error('Different skipped: ' + dep1.skipped + ' !== ' + dep2.skipped);
+    } else if (dep1.git !== dep2.git) {
+      if (dep1.git && !dep2.git) {
+        error('First dep has a git but not the second one');
+      } else if (dep2.git && !dep1.git) {
+        error('Second dep has a git but not the first one');
+      } else if (dep1.git.type !== dep2.git.type) {
+        error('Different git types: ' + dep1.git.type + ' !== ' + dep2.git.type);
+      } else if (dep1.git.user !== dep2.git.user) {
+        error('Different git users: ' + dep1.git.user + ' !== ' + dep2.git.user);
+      } else if (dep1.git.project !== dep2.git.project) {
+        error('Different git projects: ' + dep1.git.project + ' !== ' + dep2.git.project);
+      }
     } else if (dep1.error !== dep2.error) {
       if (dep1.error && !dep2.error) {
-        console.error(prefix + '['+dep1.name+'] First dep has an error but not the second one');
+        error('First dep has an error but not the second one');
       } else if (dep2.error && !dep1.error) {
-        console.error(prefix + '['+dep1.name+'] Second dep has an error but not the first one');
+        error('Second dep has an error but not the first one');
       } else if (dep1.error.code !== dep2.error.code) {
-        console.error(prefix + '['+dep1.name+'] Different error codes: ' + dep1.error.code + ' !== ' + dep2.error.code);
-      } else {
-        return true;
+        error('Different error codes: ' + dep1.error.code + ' !== ' + dep2.error.code);
       }
-      return false;
-    } else {
-      return true;
     }
+
+    return result;
   },
 
   equals: function (deps1, deps2, manager) {
