@@ -10,7 +10,8 @@ var Context = require('./lib/context');
 
 var managers = {
   npm: require('./lib/npm'),
-  bower: require('./lib/bower')
+  bower: require('./lib/bower'),
+  jspm: require('./lib/jspm')
 }
 
 // Options:

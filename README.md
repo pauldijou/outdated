@@ -22,6 +22,7 @@ outdated [options]
 
 - NPM
 - Bower
+- jspm
 
 ### Versioning
 
