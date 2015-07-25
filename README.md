@@ -30,7 +30,9 @@ outdated [options]
 - GitHub (ex: `username/project#v1.2.3`,`git://github.com/username/project#v1.2.3`)
 - Bitbucket (ex: `git+https://bitbucket.org/username/project#v1.2.3`)
 
-(if using a Git repository, git tags which are valid semver will be used as possible versions for the package)
+If using a Git repository, git tags which are valid semver will be used as possible versions for the package.
+
+If using private repositories, or just running into the API rate limit, create an authentication token by running `outdated auth add`.
 
 ## Help
 
@@ -53,7 +55,7 @@ Update: increase the locally installed version
 Current: the range you defined inside your JSON files
 Local: the locally installed version
 Wanted: the greatest version inside your current range
-Latest: the geatest stable version of the package
+Latest: the greatest stable version of the package
 Non-stable: local is greater than latest...
 
 Warning: using "latest" option without asking will automatically

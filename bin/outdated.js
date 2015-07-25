@@ -20,7 +20,7 @@ var glossary = chalk.cyan('Glossary') + ':\n'
   + chalk.bold('Current') + ': the range you defined inside your JSON files\n'
   + chalk.bold('Local') + ': the locally installed version\n'
   + chalk.bold('Wanted') + ': the greatest version inside your current range\n'
-  + chalk.bold('Latest') + ': the geatest stable version of the package\n'
+  + chalk.bold('Latest') + ': the greatest stable version of the package\n'
   + chalk.bold('Non-stable') + ': local is greater than latest...';
 
 var warning = chalk.yellow('Warning') + ': using "latest" option without asking will automatically update your JSON files to latest versions. If you want to play it safe, do not use this option and keep the "ask" option to true.'
@@ -30,7 +30,10 @@ var argv = yargs
     return require('../package').version;
   })
   .alias('v', 'version')
-  .usage('\nUsage: ' + chalk.cyan('outdated') + ' [options]\n\n' + legend + '\n\n' + glossary + '\n\n' + warning)
+  .usage('\nUsage: ' + chalk.cyan('outdated') + '[command] [options]\n\n' + legend + '\n\n' + glossary + '\n\n' + warning)
+  .command('auth add', 'Create a new token for a specific provider')
+  .command('auth list', 'Display all available authorizations')
+  .command('auth remove', 'Allow you to remove one or more existing authorizations')
   .example('$0', 'Display all outdated packages and ask you if you want to update them.')
   .example('$0 -a', 'Display all packages and ask you if you want to update them.')
   .example('$0 -a --no-ask', 'Display all packages.')
@@ -86,6 +89,24 @@ var argv = yargs
 
 if (argv.help) {
   console.log(yargs.help());
+} else if (argv._[0] === 'auth') {
+  if (argv._[1] === 'add') {
+    require('../lib/auth.js').add();
+  } else if (argv._[1] === 'list') {
+    require('../lib/auth.js').list().catch(function (err) {
+      if (err.message) {
+        console.log(logSymbols.error + chalk.red(' [Error] ') + err.message);
+      }
+    });
+  } else if (argv._[1] === 'remove') {
+    require('../lib/auth.js').remove().catch(function (err) {
+      if (err.message) {
+        console.log(logSymbols.error + chalk.red(' [Error] ') + err.message);
+      }
+    });
+  } else {
+    console.log(logSymbols.error + chalk.red(' [Error]') + ' You can only use [add] or [remove] with the [auth] command.')
+  }
 } else {
   require('../index')({
     silent: argv.silent,
