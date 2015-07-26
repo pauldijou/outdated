@@ -115,7 +115,7 @@ function askForDependencies(context, dependencies, name) {
     prompts.push({
       type: 'list',
       name: 'update',
-      message: 'Do you want to install/update all outdated packages?',
+      message: 'Do you want to install/update all outdated ' + manager.name + ' packages?',
       default: true,
       choices: [
         {name: 'Yes', value: true},
@@ -128,7 +128,7 @@ function askForDependencies(context, dependencies, name) {
     prompts.push({
       type: 'checkbox',
       name: 'jsonUpdate',
-      message: 'Select any package to update outside of their current range',
+      message: 'Select any ' + manager.name + ' package to update outside of their current range',
       choices: dependencies.filter(function (dep) {
         return dep.actions.jsonUpdate;
       }).map(function (dep) {

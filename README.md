@@ -35,7 +35,7 @@ outdated [options]
 
 If using a Git repository, git tags which are valid semver will be used as possible versions for the package.
 
-If using GitLab, private repositories, or just running into the API rate limit, create an authentication token by running `outdated auth add`. See the [authorizations section](#authorizations).
+If using GitLab, private repositories, or just reaching the API rate limit, create an authentication token by running `outdated auth add`. See the [authorizations section](#authorizations).
 
 ## Help
 
