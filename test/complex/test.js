@@ -15,7 +15,8 @@ var dependencies = {
   bower: [
     new utils.Dependency({name: 'outdated-test', current: '^1.0.0', local: '1.5.0', latest: '2.0.0'}),
     new utils.Dependency({name: 'outdated-test-2', local: '1.0.0', latest: '1.0.0'})
-  ]
+  ],
+  jspm: []
 };
 
 var postDependencies = {
@@ -27,7 +28,8 @@ var postDependencies = {
   ],
   bower: [
     new utils.Dependency({name: 'outdated-test', current: '^2.0.0', local: '2.0.0', latest: '2.0.0'})
-  ]
+  ],
+  jspm: []
 };
 
 var outdated;

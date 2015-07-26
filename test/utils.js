@@ -9,18 +9,22 @@ utils.run = function (cwd, options) {
       cwd: cwd
     });
 
-    var context = {};
+    var result = {};
 
     child.on('error', function (err) {
       reject(err);
     });
 
     child.on('exit', function () {
-      resolve(context);
+      if (result.error) {
+        reject(result.error);
+      } else {
+        resolve(result.value);
+      }
     });
 
     child.on('message', function (value) {
-      context = value;
+      result = value;
       child.disconnect();
     });
 

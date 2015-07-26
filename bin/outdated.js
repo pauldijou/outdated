@@ -110,12 +110,11 @@ var argv = yargs
     },
     V: {
       alias: 'verbose',
-      default: false,
-      type: 'boolean',
-      describe: 'More stuff on your console output'
+      describe: 'More and more stuff on your console output'
     }
   })
   .alias('h', 'help')
+  .count('verbose')
   .showHelpOnFail(false, "Specify --help for available options")
   .epilog('License Apache 2. Copyright 2015 Paul Dijou.')
   .argv;

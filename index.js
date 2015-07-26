@@ -6,13 +6,13 @@ var logSymbols = require('log-symbols');
 var inquirer = require('inquirer');
 var utils = require('./lib/utils');
 var Dependency = require('./lib/dependency');
-var Context = require('./lib/context');
+var context = require('./lib/context');
 
 var managers = {
   npm: require('./lib/npm'),
   bower: require('./lib/bower'),
   jspm: require('./lib/jspm')
-}
+};
 
 // Options:
 // silent[Boolean]: output inside console or  not
@@ -20,7 +20,7 @@ var managers = {
 // prune[Boolean]: if true, will prune all unused dependencies at the end
 // update[Boolean]: if true, will update all installed dependencies at the end
 // jsonUpdate[Boolean]: if true, will update JSON files to the latest dependencies and then install them
-// verbose[Boolean]: if true, display more log and error stack trace
+// verbose[Number]: if true, display more log and error stack trace
 var defaults = {
   silent: false,
   all: false,
@@ -32,7 +32,8 @@ var defaults = {
 };
 
 // Perform the verification of all packages for all package manangers
-function check(context) {
+function check() {
+  context.verbose(1, '# Check');
   return Promise.all(_.map(managers, function (manager, name) {
     return manager.check().then(function (dependencies) {
       context.setDependencies(name, dependencies);
@@ -47,13 +48,12 @@ function check(context) {
         throw err;
       }
     });
-  })).then(function () {
-    return context;
-  });
+  }));
 }
 
 // Output in the console the result of all the previous checks
-function output(context) {
+function output() {
+  context.verbose(1, '# Output');
   _.each(context.dependencies, function (dependencies, name) {
     var manager = managers[name];
     context.log('');
@@ -94,7 +94,7 @@ function output(context) {
 }
 
 // Depending on the result of a check, will ask the user about actions to perform like pruning or updating
-function askForDependencies(context, dependencies, name) {
+function askForDependencies(dependencies, name) {
   var manager = managers[name];
   var prompts = [];
 
@@ -153,18 +153,18 @@ function askForDependencies(context, dependencies, name) {
 }
 
 // Chain questions one package manager at a time
-function ask(context) {
+function ask() {
+  context.verbose(1, '# Ask');
   if (context.options.ask) {
     // We could run all Promises in parallel but we totally don't want that
     // otherwise, we would have the first question for all managers at the same time... oops
     // Let's chain them
-    var resultAnswers = Promise.resolve(context);
+    var resultAnswers = Promise.resolve();
 
     _.each(context.dependencies, function (dependencies, name) {
-      resultAnswers = resultAnswers.then(function (context) {
-        return askForDependencies(context, dependencies, name).then(function (answers) {
+      resultAnswers = resultAnswers.then(function () {
+        return askForDependencies(dependencies, name).then(function (answers) {
           context.addAnswers(name, answers);
-          return context;
         });
       });
     });
@@ -177,58 +177,58 @@ function ask(context) {
     _.each(context.dependencies, function (dependencies, name) {
       context.addAnswers(name, {});
     });
+
     return context;
   }
 }
 
 // Perform all actions depending on options and user answers
-function act(context) {
+function act() {
+  context.verbose(1, '# Act');
   return Promise.all(_.map(context.answers, function (answers, name) {
     var manager = managers[name];
-    var result = Promise.resolve(context);
+    var dependencies = context.dependencies[name];
+    var result = Promise.resolve();
 
-    if (context.options.prune || answers.prune) {
+    if ((context.options.prune || answers.prune) && Dependency.hasAction('prune', dependencies)) {
       result = result.then(manager.prune);
     }
 
-    if (context.options.jsonUpdate) {
+    if (context.options.jsonUpdate && Dependency.hasAction('jsonUpdate', dependencies)) {
       result = result.then(function () {
-        return manager.jsonUpdate(context, context.dependencies[name].filter(function (dep) {
+        return manager.jsonUpdate(dependencies.filter(function (dep) {
           return dep.actions.jsonUpdate;
         }));
       });
     } else if (answers.jsonUpdate && answers.jsonUpdate.length > 0) {
       result = result.then(function () {
-        return manager.jsonUpdate(context, answers.jsonUpdate);
+        return manager.jsonUpdate(answers.jsonUpdate);
       });
-    } else if (context.options.update || answers.update) {
+    } else if ((context.options.update || answers.update) && Dependency.hasAction('update', dependencies)) {
       // That's an "else if" because "jsonUpdate" will also do an "update" anyway
       result = result.then(function () {
-        return manager.update(context);
+        return manager.update();
       });
     }
 
     return result;
-  })).then(function () {
-    return context;
-  });
+  }));
 }
 
-function logError(context) {
-  return function (err) {
-    var prefix = '[' + chalk.red('ERROR') + '] ';
-    context.log('');
-    context.log(prefix + 'A totally unexpected error just happened. I am deeply sorry about that.');
-    context.log(prefix + 'Please, raise an issue on the bug tracker and explain how you used the tool and copy/paste the stack trace below.');
-    context.log(prefix + 'Thanks a lot for your help and sorry again.');
-    context.log(prefix + 'Bug tracker at: https://github.com/pauldijou/outdated/issues');
-    context.log('');
-    context.stack(err);
-    throw err;
-  };
+function logError(err) {
+  var prefix = '[' + chalk.red('ERROR') + '] ';
+  context.log('');
+  context.log(prefix + 'A totally unexpected error just happened. I am deeply sorry about that.');
+  context.log(prefix + 'Please, raise an issue on the bug tracker and explain how you used the tool and copy/paste the stack trace below.');
+  context.log(prefix + 'Thanks a lot for your help and sorry again.');
+  context.log(prefix + 'Bug tracker at: https://github.com/pauldijou/outdated/issues');
+  context.log('');
+  context.stack(err);
+  throw err;
 }
 
-function goodbye(context) {
+function goodbye() {
+  context.verbose(1, '# Goodbye');
   context.log('');
 
   var allOk = _.reduce(context.ok, function (acc, current) {
@@ -245,18 +245,21 @@ function goodbye(context) {
 
 // The main function chaining all previous ones
 function outdated(opts) {
-  var context = Context.init(opts, defaults);
+  context.setOptions(opts, defaults)
+
+  context.verbose(1, '# Outdated');
+  context.verbose(2, opts);
 
   context.log('');
   context.info('Loading dependencies... (this might take some time)');
 
-  return Promise.resolve(context)
+  return Promise.resolve()
     .then(check)
     .then(output)
     .then(ask)
     .then(act)
     .then(goodbye)
-    .catch(logError(context));
+    .catch(logError);
 }
 
 module.exports = outdated;

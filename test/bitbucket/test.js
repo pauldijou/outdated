@@ -19,7 +19,8 @@ var dependencies = {
     new utils.Dependency({name: 'test-npm-update', current: 'v1.0.1', local: '1.0.1', latest: '1.0.2', git: getGit('test-npm-update')}),
     new utils.Dependency({name: 'outdated-test-2', current: 'de70aaa06f0410de463edf2813150fdc0edad2ca', skipped: true, git: getGit('outdated-test-2')}),
     new utils.Dependency({name: 'outdated-test', current: '1.0.0', local: '1.0.0', latest: '2.0.0', git: getGit('outdated-test')})
-  ]
+  ],
+  jspm: []
 };
 
 var postDependencies = {
@@ -33,7 +34,8 @@ var postDependencies = {
     new utils.Dependency({name: 'test-npm-update', current: 'v1.0.2', local: '1.0.2', latest: '1.0.2', git: getGit('test-npm-update')}),
     new utils.Dependency({name: 'outdated-test-2', current: 'de70aaa06f0410de463edf2813150fdc0edad2ca', skipped: true, git: getGit('outdated-test-2')}),
     new utils.Dependency({name: 'outdated-test', current: '2.0.0', local: '2.0.0', latest: '2.0.0', git: getGit('outdated-test')})
-  ]
+  ],
+  jspm: []
 };
 
 var outdated;

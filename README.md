@@ -145,8 +145,13 @@ When you directly entered a token, we know nothing on how you did generate it, s
 ``` bash
 npm test
 # You can run only the tests inside a subdirectory of 'test'
-# with 'npm test [folder name]'
+# with 'npm test [folder name] [folder name...]'
 npm test complex
+# If a test fails, you can reset it using
+# 'npm test reset [folder name] [folder name...]'
+npm test reset complex
+# Or reset all tests
+npm test reset
 ```
 
 If you create new tests or edit an existing one, be sure to commit at least all those files and folders inside the test (`package.json`, `bower.json`, `.bowerrc`, `node_modules`, `bower_components` and `components`) **before** running the test since all will be reset at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
