@@ -12,7 +12,13 @@ var dependencies = {
   bower: [
     new utils.Dependency({name: 'outdated-test', current: '^1.0.0', latest: '2.0.0'})
   ],
-  jspm: []
+  jspm: [
+    new utils.Dependency({name: 'outdated-test', current: '^1.0.0', local: '1.0.1', latest: '2.0.0'}),
+    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', latest: '1.0.1'}),
+    new utils.Dependency({name: 'babel-core', local: '5.8.9'}),
+    new utils.Dependency({name: 'babel-runtime', local: '5.8.9'}),
+    new utils.Dependency({name: 'core-js', local: '0.9.18'})
+  ]
 };
 
 var outdated;
@@ -43,5 +49,32 @@ describe('Basic dependencies', function () {
 
   it('should have correct dependencies', function () {
     return expect(outdated.then(utils.check('dependencies', dependencies))).to.eventually.be.true;
+  });
+
+  it('should update package.json', function () {
+    return expect(outdated.then(function () { return require('./package.json') })).to.eventually.deep.equal({
+      "name": "test-basic",
+      "dependencies": {
+        "outdated-test": "^1.0.0",
+        "test-npm-update": "^1.0.0"
+      },
+      "jspm": {
+        "directories": {},
+        "dependencies": {
+          "outdated-test": "npm:outdated-test@^1.0.0",
+          "test-npm-update": "npm:test-npm-update@^1.0.0"
+        },
+        "devDependencies": {}
+      }
+    });
+  });
+
+  it('should update bower.json', function () {
+    return expect(outdated.then(function () { return require('./bower.json') })).to.eventually.deep.equal({
+      "name": "test-basic",
+      "dependencies": {
+        "outdated-test": "^1.0.0"
+      }
+    });
   });
 })

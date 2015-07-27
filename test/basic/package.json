@@ -3,5 +3,13 @@
   "dependencies": {
     "outdated-test": "^1.0.0",
     "test-npm-update": "^1.0.0"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "outdated-test": "npm:outdated-test@^1.0.0",
+      "test-npm-update": "npm:test-npm-update@^1.0.0"
+    },
+    "devDependencies": {}
   }
 }

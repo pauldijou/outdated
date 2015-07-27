@@ -1,0 +1,1 @@
+module.exports = require("npm:outdated-test@1.5.0/index");

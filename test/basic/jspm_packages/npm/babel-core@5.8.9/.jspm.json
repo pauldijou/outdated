@@ -1,0 +1,83 @@
+{
+  "name": "babel-core",
+  "version": "5.8.9",
+  "description": "A compiler for writing next generation JavaScript",
+  "author": {
+    "name": "Sebastian McKenzie",
+    "email": "sebmck@gmail.com"
+  },
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel"
+  },
+  "browser": {
+    "./lib/api/register/node.js": "./lib/api/register/browser.js"
+  },
+  "keywords": [
+    "6to5",
+    "babel",
+    "classes",
+    "const",
+    "es6",
+    "harmony",
+    "let",
+    "modules",
+    "transpile",
+    "transpiler",
+    "var"
+  ],
+  "scripts": {
+    "bench": "make bench",
+    "test": "make test"
+  },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "_id": "babel-core@5.8.9",
+  "_shasum": "9f57e65ca806a4e4922973e0b7be07e74a96a8ae",
+  "_from": ".",
+  "_npmVersion": "2.7.1",
+  "_nodeVersion": "1.6.1",
+  "_npmUser": {
+    "name": "sebmck",
+    "email": "sebmck@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "sebmck",
+      "email": "sebmck@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "9f57e65ca806a4e4922973e0b7be07e74a96a8ae",
+    "tarball": "http://registry.npmjs.org/babel-core/-/babel-core-5.8.9.tgz"
+  },
+  "directories": {},
+  "jspm": {
+    "main": "browser.js",
+    "dependencies": {},
+    "jspmNodeConversion": false,
+    "shim": {
+      "browser": {
+        "exports": "babel"
+      }
+    },
+    "map": {
+      "regenerator/runtime": "babel-runtime/regenerator/runtime"
+    }
+  },
+  "main": "browser.js",
+  "jspmNodeConversion": false,
+  "shim": {
+    "browser": {
+      "exports": "babel"
+    }
+  },
+  "map": {
+    "regenerator/runtime": "babel-runtime/regenerator/runtime"
+  },
+  "registry": "npm",
+  "dependencies": {}
+}
