@@ -26,7 +26,7 @@ if (argv._[0] === 'reset') {
   var command = './node_modules/mocha/bin/mocha --recursive --no-timeouts --reporter mocha-better-spec-reporter';
 
   command = argv._.reduce(function (c, t) {
-    return c + ' ' + path.resolve(__dirname, '..', 'test', t, '*.js');
+    return c + ' ' + path.resolve(__dirname, '..', 'test', t, 'test*.js');
   }, command);
 
   cp.execSync(command, {stdio: 'inherit'});
