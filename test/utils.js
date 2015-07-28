@@ -54,6 +54,7 @@ utils.reset = function (dir) {
   checkout(path.join(dir, 'bower_components'));
   checkout(path.join(dir, 'components'));
   checkout(path.join(dir, 'packages'));
+  checkout(path.join(dir, 'jspm_packages'));
   cp.execSync('git clean -fd ' + dir);
 };
 
