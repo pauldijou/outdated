@@ -271,16 +271,16 @@ function act() {
         });
       });
     } else if (answers.jsonUpdate && answers.jsonUpdate.length > 0) {
-      context.info('[' + manager.name + '] Start updating');
       result = result.then(function () {
+        context.info('[' + manager.name + '] Start updating');
         return manager.jsonUpdate(answers.jsonUpdate).then(function () {
           context.info('[' + manager.name + '] Done updating');
         });
       });
     } else if ((context.options.update || answers.update) && Dependency.hasAction('update', dependencies)) {
       // That's an "else if" because "jsonUpdate" will also do an "update" anyway
-      context.info('[' + manager.name + '] Start updating');
       result = result.then(function () {
+        context.info('[' + manager.name + '] Start updating');
         return manager.update();
       }).then(function () {
         context.info('[' + manager.name + '] Done updating');
