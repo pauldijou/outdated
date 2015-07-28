@@ -46,9 +46,12 @@ utils.reset = function (dir) {
   checkout(path.join(dir, 'package.json'));
   checkout(path.join(dir, 'bower.json'));
   checkout(path.join(dir, '.bowerrc'));
+  checkout(path.join(dir, 'config.js'));
+  checkout(path.join(dir, 'system_config.js'));
   checkout(path.join(dir, 'node_modules'));
   checkout(path.join(dir, 'bower_components'));
   checkout(path.join(dir, 'components'));
+  checkout(path.join(dir, 'packages'));
   cp.execSync('git clean -fd ' + dir);
 };
 
