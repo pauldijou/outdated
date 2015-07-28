@@ -9,8 +9,8 @@ var dependencies = {
     new utils.Dependency({name: 'outdated-test', current: '^1.0.0', local: '1.5.0', latest: '2.0.0'}),
     new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', latest: '1.0.1'}),
     new utils.Dependency({name: 'does-not-exist-never', current: '1.0.0', skipped: true, error: {code: 'NOTFOUND'}}),
-    new utils.Dependency({name: 'outdated-test-2', local: '1.0.0', latest: '1.0.0'}),
-    new utils.Dependency({name: 'fake-but-awesome', local: '1.0.0', skipped: true, error: {code: 'NOTFOUND'}})
+    new utils.Dependency({name: 'outdated-test-2', local: '1.0.0'}),
+    new utils.Dependency({name: 'fake-but-awesome', local: '1.0.0'})
   ],
   bower: [
     new utils.Dependency({name: 'outdated-test', current: '^1.0.0', local: '1.5.0', latest: '2.0.0'}),
@@ -38,7 +38,7 @@ var outdated2;
 describe('Complex dependencies', function () {
   before(function () {
     outdated = utils.run(__dirname, {
-      silent: true,
+      silent: false,
       ask: false,
       prune: true,
       update: true,
@@ -47,7 +47,7 @@ describe('Complex dependencies', function () {
 
     outdated2 = outdated.then(function () {
       return utils.run(__dirname, {
-        silent: true,
+        silent: false,
         ask: false
       })
     });
