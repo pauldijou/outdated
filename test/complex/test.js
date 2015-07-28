@@ -38,7 +38,7 @@ var outdated2;
 describe('Complex dependencies', function () {
   before(function () {
     outdated = utils.run(__dirname, {
-      silent: false,
+      silent: true,
       ask: false,
       prune: true,
       update: true,
@@ -47,7 +47,7 @@ describe('Complex dependencies', function () {
 
     outdated2 = outdated.then(function () {
       return utils.run(__dirname, {
-        silent: false,
+        silent: true,
         ask: false
       })
     });
