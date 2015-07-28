@@ -2,6 +2,7 @@ var _ = require('lodash');
 var utils = module.exports;
 var cp = require('child_process');
 var path = require('path');
+var fs = require('fs');
 
 utils.run = function (cwd, options) {
   return new Promise(function (resolve, reject) {
@@ -34,6 +35,7 @@ utils.run = function (cwd, options) {
 
 function checkout(p) {
   try {
+    fs.statSync(p);
     cp.execSync('git checkout ' + p);
   } catch (e) {}
 }
