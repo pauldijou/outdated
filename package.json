@@ -7,9 +7,9 @@
     "email": "paul.dijou@gmail.com",
     "url": "https://github.com/pauldijou/outdated/issues"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/pauldijou/outdated.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pauldijou/outdated.git"
   },
   "author": {
     "email": "paul.dijou@gmail.com",
