@@ -15,7 +15,7 @@ outdated --setup
 ## Usage
 
 ``` bash
-outdated [options]
+outdated [command] [options]
 ```
 
 ## Support
@@ -25,6 +25,8 @@ outdated [options]
 - NPM
 - Bower
 - jspm
+
+**Warning** Previous to jspm 0.16, there is no way do differentiate a NPM package.json from a jspm unprefixed package.json. Please, use `outdated --no-npm` or `outdated --no-jspm` depending on your context.
 
 ### Versioning
 
@@ -79,7 +81,10 @@ Options:
   -p, --prune    Prune all unused packages            [boolean] [default: false]
   -u, --update   Update to the wanted version         [boolean] [default: false]
   -l, --latest   Update to the latest version         [boolean] [default: false]
-  -V, --verbose  More stuff on your console output    [boolean] [default: false]
+  -V, --verbose  More stuff on your console output                       [count]
+  --npm          Enable or disable NPM checking                        [boolean]
+  --bower        Enable or disable Bower checking                      [boolean]
+  --jspm         Enable or disable jspm checking                       [boolean]
   -v, --version  Show version number                                   [boolean]
 
 Examples:
@@ -90,8 +95,27 @@ Examples:
   outdated -a --no-ask    Display all packages.
   outdated -apu --no-ask  Display all packages and automatically prune and
                           update them.
+  outdated --bower        Check only Bower dependencies.
+  outdated --no-npm       Check all dependencies except NPM ones.
 
 License Apache 2. Copyright 2015 Paul Dijou.
+```
+
+## Enable or disable package managers
+
+For each supported package managers, you have a CLI option with the same name. If setting one or more of those options to `true`, only those package managers will be checked. If setting one or more to `false`, all package managers except those ones will be checked.
+
+```bash
+# Only check NPM
+outdated --npm
+# Only check jspm and Bower
+outdated --jspm --bower
+# Check all except jspm
+outdated --no-jspm
+# Check all except NPM and jspm
+outdated --no-npm --no-jspm
+# Only check Bower
+outdated --bower --no-npm
 ```
 
 ## Configuration
