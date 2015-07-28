@@ -71,6 +71,8 @@ var argv = yargs
   .example('$0 -a', 'Display all packages and ask you if you want to update them.')
   .example('$0 -a --no-ask', 'Display all packages.')
   .example('$0 -apu --no-ask', 'Display all packages and automatically prune and update them.')
+  .example('$0 --bower', 'Check only Bower dependencies.')
+  .example('$0 --no-npm', 'Check all dependencies except NPM ones.')
   .options({
     s: {
       alias: 'silent',
@@ -110,11 +112,26 @@ var argv = yargs
     },
     V: {
       alias: 'verbose',
-      describe: 'More and more stuff on your console output'
+      type: 'count',
+      describe: 'More stuff on your console output'
+    },
+    npm: {
+      type: 'boolean',
+      default: undefined,
+      describe: 'Enable or disable NPM checking'
+    },
+    bower: {
+      type: 'boolean',
+      default: undefined,
+      describe: 'Enable or disable Bower checking'
+    },
+    jspm: {
+      type: 'boolean',
+      default: undefined,
+      describe: 'Enable or disable jspm checking'
     }
   })
   .alias('h', 'help')
-  .count('verbose')
   .showHelpOnFail(false, "Specify --help for available options")
   .epilog('License Apache 2. Copyright 2015 Paul Dijou.')
   .argv;
@@ -147,6 +164,9 @@ if (argv.help) {
     prune: argv.prune,
     update: argv.update,
     jsonUpdate: argv.latest,
-    verbose: argv.verbose
+    verbose: argv.verbose,
+    npm: argv.npm,
+    bower: argv.bower,
+    jspm: argv.jspm
   });
 }
