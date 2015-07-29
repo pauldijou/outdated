@@ -34,8 +34,10 @@ var postDependencies = {
     new utils.Dependency({name: 'outdated-test', current: '^2.0.0', local: '2.0.0', latest: '2.0.0'})
   ],
   jspm: [
+    // FIXME: remove when jspm clean fixed
+    new utils.Dependency({name: 'fake-but-awesome', local: '1.0.0'}),
     new utils.Dependency({name: 'outdated-test', current: '^2.0.0', local: '2.0.0', latest: '2.0.0'}),
-    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.1', latest: '1.0.1'})
+    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.2', latest: '1.0.1'})
   ]
 };
 
