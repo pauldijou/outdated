@@ -1,0 +1,6 @@
+{
+  "name": "test-demo",
+  "dependencies": {
+    "outdated-test": "^1.0.0"
+  }
+}

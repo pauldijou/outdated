@@ -1,0 +1,15 @@
+{
+  "name": "test-demo",
+  "dependencies": {
+    "outdated-test": "^1.0.0",
+    "outdated-test-2": "^1.0.0"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "outdated-test": "npm:outdated-test@^1.0.0",
+      "outdated-test-2": "npm:outdated-test-2@^1.0.0"
+    },
+    "devDependencies": {}
+  }
+}

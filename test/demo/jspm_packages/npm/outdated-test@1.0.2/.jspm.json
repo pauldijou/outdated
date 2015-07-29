@@ -1,0 +1,31 @@
+{
+  "name": "outdated-test",
+  "version": "1.0.2",
+  "description": "An empty package to test outdated",
+  "_id": "outdated-test@1.0.2",
+  "scripts": {},
+  "_shasum": "59002a54e77c21a3c5f4761f5976cada23aadc3f",
+  "_from": ".",
+  "_npmVersion": "2.7.4",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
+    "name": "pauldijou",
+    "email": "paul.dijou@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "pauldijou",
+      "email": "paul.dijou@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "59002a54e77c21a3c5f4761f5976cada23aadc3f",
+    "tarball": "http://registry.npmjs.org/outdated-test/-/outdated-test-1.0.2.tgz"
+  },
+  "format": "cjs",
+  "ignore": [
+    "node_modules"
+  ],
+  "registry": "npm",
+  "dependencies": {}
+}
