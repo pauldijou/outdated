@@ -2,7 +2,7 @@
 
 Manage, update and prune your dependencies like a boss.
 
-See it in action with this [awesome demo](https://asciinema.org/a/23508) !
+See it in action with this [awesome demo](https://asciinema.org/a/24116) !
 
 ## Install
 
