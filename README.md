@@ -26,9 +26,7 @@ outdated [command] [options]
 - Bower
 - jspm
 
-**Warning** Previous to jspm 0.16, there is no way do differentiate a NPM package.json from a jspm unprefixed package.json. Please, use `outdated --no-npm` or `outdated --no-jspm` depending on your context.
-
-**Bug** jspm pruning isn't currently working. Right now, it would be too much of hack to make it happen. Should be fixed with [#964](https://github.com/jspm/jspm-cli/issues/964).
+**Warning** There are still a few [problems](#problems-and-fixes). Most of them are linked to the corresponding issue to fix it.
 
 ### Versioning
 
@@ -102,6 +100,16 @@ Examples:
 
 License Apache 2. Copyright 2015 Paul Dijou.
 ```
+
+## Problems and fixes
+
+Prior to jspm 0.16, there is no way do differentiate a NPM package.json from a jspm unprefixed package.json. Please, use `outdated --no-npm` or `outdated --no-jspm` depending on your context.
+
+jspm pruning isn't currently working. Right now, it would be too much of hack to make it happen. Should be fixed with [#964](https://github.com/jspm/jspm-cli/issues/964).
+
+`npm update` target the biggest possible version, even beyond `latest` through dist-tags. This is kind of problematic since it can download alpha and beta versions without any warnings. This is why `outdated` actually use `npm install` to update your packages, targeting a specific version which will always be capped by the `latest` tag.
+
+NPM doesn't show any warning for missing devDependencies. `outdated` fix that and an [issue](https://github.com/npm/npm/issues/9097) has been opened.
 
 ## Enable or disable package managers
 
