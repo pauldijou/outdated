@@ -3,5 +3,8 @@
   "dependencies": {
     "outdated-test": "^1.0.0",
     "test-npm-update": "^1.0.0"
+  },
+  "devDependencies": {
+    "outdated-test-2": "^1.0.0"
   }
 }
