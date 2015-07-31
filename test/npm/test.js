@@ -7,6 +7,7 @@ var utils = require('../utils');
 var dependencies = {
   npm: [
     new utils.Dependency({name: 'outdated-test', current: '^1.0.0', local: '1.0.1', latest: '2.0.0'}),
+    new utils.Dependency({name: 'outdated-test-2', current: '^1.0.0', latest: '1.0.0'}),
     new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', latest: '1.0.1'})
   ],
   bower: [],

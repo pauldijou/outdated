@@ -26,8 +26,7 @@ var dependencies = {
 var postDependencies = {
   npm: [
     new utils.Dependency({name: 'outdated-test', current: '^2.0.0', local: '2.0.0', latest: '2.0.0'}),
-    // This is the bug of NPM update installing a version after latest
-    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.2', latest: '1.0.1'}),
+    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.1', latest: '1.0.1'}),
     new utils.Dependency({name: 'does-not-exist-never', current: '1.0.0', skipped: true, error: {code: 'NOTFOUND'}})
   ],
   bower: [
@@ -37,7 +36,7 @@ var postDependencies = {
     // FIXME: remove when jspm clean fixed
     new utils.Dependency({name: 'fake-but-awesome', local: '1.0.0'}),
     new utils.Dependency({name: 'outdated-test', current: '^2.0.0', local: '2.0.0', latest: '2.0.0'}),
-    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.2', latest: '1.0.1'})
+    new utils.Dependency({name: 'test-npm-update', current: '^1.0.0', local: '1.0.1', latest: '1.0.1'})
   ]
 };
 
