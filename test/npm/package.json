@@ -1,5 +1,5 @@
 {
-  "name": "test-basic",
+  "name": "test-npm",
   "dependencies": {
     "outdated-test": "^1.0.0",
     "test-npm-update": "^1.0.0"

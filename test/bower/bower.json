@@ -1,5 +1,5 @@
 {
-  "name": "test-basic",
+  "name": "test-bower",
   "dependencies": {
     "outdated-test": "^1.0.0"
   }
