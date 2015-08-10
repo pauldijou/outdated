@@ -6,7 +6,7 @@ See it in action with this [awesome demo](https://asciinema.org/a/24116) !
 
 ## Install
 
-```
+```bash
 npm install -g outdated
 # You can enable completion by doing
 outdated --setup
@@ -103,13 +103,15 @@ License Apache 2. Copyright 2015 Paul Dijou.
 
 ## Problems and fixes
 
-Prior to jspm 0.16, there is no way do differentiate a NPM package.json from a jspm unprefixed package.json. Please, use `outdated --no-npm` or `outdated --no-jspm` depending on your context.
+- Prior to jspm 0.16, there is no way do differentiate a NPM package.json from a jspm unprefixed package.json. Please, use `outdated --no-npm` or `outdated --no-jspm` depending on your context.
 
-jspm pruning isn't currently working. Right now, it would be too much of hack to make it happen. Should be fixed with [#964](https://github.com/jspm/jspm-cli/issues/964).
+- jspm pruning isn't currently working. Right now, it would be too much of hack to make it happen. Should be fixed with [#964](https://github.com/jspm/jspm-cli/issues/964).
 
-`npm update` target the biggest possible version, even beyond `latest` through dist-tags. This is kind of problematic since it can download alpha and beta versions without any warnings. This is why `outdated` actually use `npm install` to update your packages, targeting a specific version which will always be capped by the `latest` tag.
+- `npm update` target the biggest possible version, even beyond `latest` through dist-tags. This is kind of problematic since it can download alpha and beta versions without any warnings. This is why `outdated` actually use `npm install` to update your packages, targeting a specific version which will always be capped by the `latest` tag.
 
-NPM doesn't show any warning for missing devDependencies. `outdated` fix that and an [issue](https://github.com/npm/npm/issues/9097) has been opened.
+- NPM doesn't show any warning for missing devDependencies. `outdated` fix that and an [issue](https://github.com/npm/npm/issues/9097) has been opened.
+
+- To prevent unpredictable behaviors, it uses locally installed versions of all package managers. This can be problematic if you are using another version in your project. For example, it's currently based on NPM 2 but more and more people are switching to NPM 3. I'm thinking about a solution around it.
 
 ## Enable or disable package managers
 
@@ -188,7 +190,7 @@ npm test reset complex
 npm test reset
 ```
 
-If you create new tests or edit an existing one, be sure to commit at least all those files and folders inside the test (`package.json`, `bower.json`, `.bowerrc`, `node_modules`, `bower_components` and `components`, 'jspm_packages', 'packages', 'config.js', 'system_config.js') **before** running the test since all will be reset at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
+If you create new tests or edit an existing one, be sure to commit at least all those files and folders inside the test (`package.json`, `bower.json`, `.bowerrc`, `node_modules`, `bower_components` and `components`, `jspm_packages`, `packages`, `config.js`, `system_config.js`) **before** running the test since all will be reset at the end using `git checkout`. All `error: pathspec` in the logs are normal, it's just Git failing to found a file to checkout.
 
 ## License
 
