@@ -207,11 +207,13 @@ function askForDependencies(dependencies, name) {
     if (prompts.length > 0) {
       context.log('');
       context.log(chalk.underline(manager.name));
-    }
 
-    inquirer.prompt(prompts, function (answers) {
-      resolve(answers);
-    });
+      inquirer.prompt(prompts, function (answers) {
+        resolve(answers);
+      });
+    } else {
+      resolve({});
+    }
   });
 }
 
