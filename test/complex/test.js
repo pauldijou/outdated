@@ -91,12 +91,11 @@ describe('Complex dependencies', function () {
       devDependencies: {
         'outdated-test': '^2.0.0'
       },
-      "jspm": {
-        "directories": {},
-        "dependencies": {
+      jspm: {
+        dependencies: {
           "test-npm-update": "npm:test-npm-update@^1.0.0"
         },
-        "devDependencies": {
+        devDependencies: {
           "outdated-test": "npm:outdated-test@^2.0.0"
         }
       }
